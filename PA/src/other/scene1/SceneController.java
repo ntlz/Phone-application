@@ -1,4 +1,4 @@
-package scene1;
+package other.scene1;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -7,9 +7,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
-
-import javax.xml.soap.Text;
 
 
 public class SceneController {
