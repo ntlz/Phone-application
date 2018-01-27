@@ -60,4 +60,5 @@ public class PaymentUser {
         this.email = email;
         isEmailValid = false;
     }
+
 }
