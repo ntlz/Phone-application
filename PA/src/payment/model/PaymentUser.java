@@ -5,32 +5,32 @@ package payment.model;
  */
 public class PaymentUser {
 
-    private String numberOfPhone;               //номер телефона
+    private String phoneNumber;               //номер телефона
     private String password;                    //пароль
     private String email;                       //почта
-    private boolean isNumberOfPhoneValid;       //флаг проверен/не проверен номер телефона
+    private boolean isPhoneNumberValid;       //флаг проверен/не проверен номер телефона
     private boolean isEmailValid;               //флаг проверен/не проверен email
 
-    public PaymentUser(String numberOfPhone,
+    public PaymentUser(String phoneNumber,
                        String password){
-        this.numberOfPhone = numberOfPhone;
+        this.phoneNumber = phoneNumber;
         this.password = password;       //добавить шифрование пароля !!!
-        this.isNumberOfPhoneValid = false;
+        this.isPhoneNumberValid = false;
         this.isEmailValid = false;
     }
 
-    public PaymentUser(String numberOfPhone,
+    public PaymentUser(String phoneNumber,
                        String password,
                        String email) {
-        this.numberOfPhone = numberOfPhone;
+        this.phoneNumber = phoneNumber;
         this.password = password;       //добавить шифрование пароля !!!
         this.email = email;             //вставить проверку email с помощью регулярок
-        this.isNumberOfPhoneValid = false;
+        this.isPhoneNumberValid = false;
         this.isEmailValid = false;
     }
 
-    public String getNumberOfPhone() {
-        return numberOfPhone;
+    public String getPhoneNumber() {
+        return phoneNumber;
     }
 
     public void addEmail(String email) {
@@ -41,9 +41,9 @@ public class PaymentUser {
         return email;
     }
 
-    public void changeNumberOfPhoneValid(){
-        if(!isNumberOfPhoneValid)
-            isNumberOfPhoneValid = true;
+    public void changePhoneNumberValid(){
+        if(!isPhoneNumberValid)
+            isPhoneNumberValid = true;
     }
 
     public void changeEmailValid(){
@@ -51,9 +51,9 @@ public class PaymentUser {
             isEmailValid = true;
     }
 
-    public void changePhone(String newPhone){
-        numberOfPhone = newPhone;
-        isNumberOfPhoneValid = false;
+    public void changePhoneNumber(String newPhoneNumber){
+        phoneNumber = newPhoneNumber;
+        isPhoneNumberValid = false;
     }
 
     public void changeEmail(String email){
