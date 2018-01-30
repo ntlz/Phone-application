@@ -1,11 +1,11 @@
-package payment.model;
+package common.model;
 
 import java.util.Date;
 
 /**
  * класс, содержащий информацию о счете плательщика
  */
-public class PaymentBill {
+public class BillModel {
 
     private String idOfBill;        //идентификатор счета
     private String description;     //описание счета
@@ -28,10 +28,9 @@ public class PaymentBill {
         public String getSymbol(){
             return symbol;
         }
-
     }
 
-    public PaymentBill(String idOfBill,
+    public BillModel(String idOfBill,
                        String description,
                        String nameOfSender,
                        Date dateOfSending,
