@@ -1,5 +1,10 @@
 package payment.model;
 
+import common.model.Bill;
+
+import java.util.Date;
+import java.util.Vector;
+
 /**
  * класс, содержащий информацию о карте плательщика
  */
@@ -10,6 +15,7 @@ public class PaymentUser {
     private String email;                       //почта
     private boolean isPhoneNumberValid;       //флаг проверен/не проверен номер телефона
     private boolean isEmailValid;               //флаг проверен/не проверен email
+    private Vector<Bill> bills;
 
     public PaymentUser(String phoneNumber,
                        String password){
@@ -17,6 +23,7 @@ public class PaymentUser {
         this.password = password;       //добавить шифрование пароля !!!
         this.isPhoneNumberValid = false;
         this.isEmailValid = false;
+        this.bills = new Vector<>(10);
     }
 
     public PaymentUser(String phoneNumber,
@@ -27,6 +34,7 @@ public class PaymentUser {
         this.email = email;             //вставить проверку email с помощью регулярок
         this.isPhoneNumberValid = false;
         this.isEmailValid = false;
+        this.bills = new Vector<>(10);
     }
 
     public String getPhoneNumber() {
@@ -61,4 +69,17 @@ public class PaymentUser {
         isEmailValid = false;
     }
 
+    public void addBill(String idOfBill,
+                        String description,
+                        String nameOfSender,
+                        Date dateOfSending,
+                        Date dateOfPay,
+                        Bill.Currency currency,
+                        int sum){
+        bills.add(new Bill(idOfBill, description, nameOfSender, dateOfSending, dateOfPay, Bill.Currency.RUBLE, sum));
+    }
+
+    public Vector<Bill> getBills(){
+        return bills;
+    }
 }

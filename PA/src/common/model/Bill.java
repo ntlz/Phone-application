@@ -5,7 +5,7 @@ import java.util.Date;
 /**
  * класс, содержащий информацию о счете плательщика
  */
-public class BillModel {
+public class Bill {
 
     private String idOfBill;        //идентификатор счета
     private String description;     //описание счета
@@ -30,13 +30,13 @@ public class BillModel {
         }
     }
 
-    public BillModel(String idOfBill,
-                       String description,
-                       String nameOfSender,
-                       Date dateOfSending,
-                       Date dateOfPay,
-                       Currency currency,
-                       int sum){
+    public Bill(String idOfBill,
+                String description,
+                String nameOfSender,
+                Date dateOfSending,
+                Date dateOfPay,
+                Currency currency,
+                int sum){
         this.idOfBill = idOfBill;
         this.description = description;
         this.nameOfSender = nameOfSender;
