@@ -18,7 +18,7 @@ public class Bill {
 
     public enum Currency{
 
-        RUBLE("руб"), DOLLAR("дол"), EURO("евро");
+        RUBLE("руб."), DOLLAR("дол"), EURO("евро");
         private String symbol;
 
         private Currency(String symbol){

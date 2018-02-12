@@ -3,7 +3,7 @@ package payment.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Font;
+import payment.view.BillInformationAndPayViewer;
 
 public class BillInformationAndPayController {
 
@@ -28,4 +28,14 @@ public class BillInformationAndPayController {
     @FXML
     private Button payAndMessageButton;
 
+    private static BillInformationAndPayViewer viewer;
+
+    @FXML
+    void initialize() throws Exception{
+        viewer.pullInformation(senderLabel, descriptionLabel, dateLabel, sumLabel, sumUpperLabel);
+    }
+
+    public static void setViewer(BillInformationAndPayViewer newViewer){
+        viewer = newViewer;
+    }
 }

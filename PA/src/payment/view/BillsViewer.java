@@ -13,7 +13,6 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
-import javafx.util.Callback;
 import payment.controller.BillsController;
 import payment.model.PaymentUser;
 
@@ -22,11 +21,12 @@ import java.util.Queue;
 
 public class BillsViewer {
 
-    private static PaymentUser user;        //пользователь данного кабинета
-    private static Queue<Bill> bills;       //очередь для выдачи счетов пользователя
-    private static boolean flag = false;    //флаг для отрисовки кнопок счетов
+    private PaymentUser user;        //пользователь данного кабинета
+    private  Queue<Bill> bills;       //очередь для выдачи счетов пользователя
+    private boolean flag = false;    //флаг для отрисовки кнопок счетов
+    private BillsController billsController;
 
-    static class BillLine extends ListCell<String> {
+    class BillLine extends ListCell<String> {
         Bill bill;
         HBox hbox = new HBox();
         Label label = new Label("empty");
@@ -34,7 +34,7 @@ public class BillsViewer {
         Button button = new Button();
         String lastItem;
 
-        private BillLine(Bill bill) {
+        private BillLine(Bill bill){
             super();
             if(bill != null){
                 this.bill = bill;
@@ -49,7 +49,11 @@ public class BillsViewer {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    BillsController.onButtonPayClick(event);
+                    try {
+                        billsController.onButtonPayClick(event, bill);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -64,7 +68,11 @@ public class BillsViewer {
             button.setOnAction(new EventHandler<ActionEvent>() {
                 @Override
                 public void handle(ActionEvent event) {
-                    BillsController.onButtonPayClick(event);
+                    try {
+                        billsController.onButtonPayClick(event, null);
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
                 }
             });
         }
@@ -84,7 +92,7 @@ public class BillsViewer {
         }
     }
 
-    public static void loadData(ObservableList<String> list, ListView<String> listView, Text textSum) throws Exception{
+    public void loadData(ObservableList<String> list, ListView<String> listView, Text textSum) throws Exception{
         list.removeAll();
         int sum = 0;
         for (Bill b: user.getBills()) {
@@ -107,13 +115,18 @@ public class BillsViewer {
         listView.getItems().addAll(list);
     }
 
-    public static void setBills(PaymentUser newUser){
+    private static void setSumText(Text textSum, int sum){
+        textSum.setText("Общая сумма:\n" + sum + "руб");
+    }
+
+    public void setBillsController(BillsController billsController){
+        this.billsController = billsController;
+    }
+
+    public void setBills(PaymentUser newUser){
         user = newUser;
         bills = new ArrayDeque<>();
         bills.addAll(newUser.getBills());
     }
 
-    private static void setSumText(Text textSum, int sum){
-        textSum.setText("Общая сумма:\n" + sum + "руб");
-    }
 }
