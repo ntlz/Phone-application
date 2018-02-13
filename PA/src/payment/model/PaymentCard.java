@@ -5,7 +5,7 @@ package payment.model;
  */
 public class PaymentCard {
 
-    private String lastNumbers;
+    private String lastNumbers; //последние цифры номера карты
 
     public PaymentCard(String lastNumbers){
         this.lastNumbers = lastNumbers;
