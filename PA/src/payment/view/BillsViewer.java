@@ -4,6 +4,9 @@ import common.model.Bill;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListCell;
@@ -13,6 +16,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.Priority;
 import javafx.scene.text.Font;
 import javafx.scene.text.Text;
+import javafx.stage.Stage;
 import payment.controller.BillsController;
 import payment.model.PaymentUser;
 
@@ -21,7 +25,6 @@ import java.util.Queue;
 
 public class BillsViewer {
 
-    private PaymentUser user;        //пользователь данного кабинета
     private  Queue<Bill> bills;       //очередь для выдачи счетов пользователя
     private boolean flag = false;    //флаг для отрисовки кнопок счетов
     private BillsController billsController;
@@ -41,19 +44,16 @@ public class BillsViewer {
                 button.setText(bill.getSum() + bill.getCurrency().getSymbol());
             }
             button.setFont(Font.font(15));
+
             hbox.getChildren().addAll(label, pane, button);
             HBox.setHgrow(pane, Priority.ALWAYS);
             label.setFont(Font.font(18));
-
             button.setFont(Font.font(15));
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        billsController.onButtonPayClick(event, bill);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            button.setOnAction(event -> {
+                try {
+                    billsController.onButtonPayClick(event, bill);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -65,14 +65,11 @@ public class BillsViewer {
             label.setFont(Font.font(18));
             button.setText("-");
             button.setFont(Font.font(15));
-            button.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    try {
-                        billsController.onButtonPayClick(event, null);
-                    } catch (Exception e) {
-                        e.printStackTrace();
-                    }
+            button.setOnAction(event -> {
+                try {
+                    billsController.onButtonPayClick(event, null);
+                } catch (Exception e) {
+                    e.printStackTrace();
                 }
             });
         }
@@ -90,13 +87,17 @@ public class BillsViewer {
                 setGraphic(hbox);
             }
         }
+
     }
 
-    public void loadData(ObservableList<String> list, ListView<String> listView, Text textSum) throws Exception{
+    public void loadData(ObservableList<String> list, ListView<String> listView, Text textSum, PaymentUser user) throws Exception{
+        setBills(user);
         list.removeAll();
         int sum = 0;
         for (Bill b: user.getBills()) {
-            list.add(b.getDescription());
+            String description = b.getDescription();
+            description = checkDescriptionLength(description);  //вывод укороченного описания, если длина больше 25 символов
+            list.add(description);
             sum += b.getSum();
         }
         setSumText(textSum, sum);
@@ -115,18 +116,35 @@ public class BillsViewer {
         listView.getItems().addAll(list);
     }
 
+    private String checkDescriptionLength(String description){
+        if(description.length() > 25){
+            description = description.substring(0, 22) + "...";
+        }
+        return description;
+    }
+
     private static void setSumText(Text textSum, int sum){
         textSum.setText("Общая сумма:\n" + sum + "руб");
     }
 
-    public void setBillsController(BillsController billsController){
-        this.billsController = billsController;
+    private void setBills(PaymentUser user){
+        bills = new ArrayDeque<>();
+        bills.addAll(user.getBills());
     }
 
-    public void setBills(PaymentUser newUser){
-        user = newUser;
-        bills = new ArrayDeque<>();
-        bills.addAll(newUser.getBills());
+    public void loadScene(Stage primaryStage, PaymentUser user) throws Exception{
+        billsController = new BillsController();
+        billsController.setBillViewer(this);
+        billsController.setUser(user);
+        billsController.setStage(primaryStage);
+        Parent root = FXMLLoader.load(getClass().getResource("structures/BillsStructure.fxml"));
+        primaryStage.setTitle("My Bills");
+
+        Scene scene = new Scene(root, 335, 600);
+        scene.getStylesheets().add((getClass().getResource("css/ButtonsStyle.css")).toExternalForm());
+
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 }

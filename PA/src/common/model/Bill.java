@@ -8,7 +8,7 @@ import java.util.Date;
 public class Bill {
 
     private String idOfBill;        //идентификатор счета
-    private String description;     //описание счета
+    private String description;     //описание счета (не больше 25 символов)
     private String nameOfSender;    //имя выставителя счета
     private Date dateOfSending;     //дата выставления
     private Date dateOfPay;         //дата оплаты

@@ -5,6 +5,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import payment.view.BillInformationAndPayViewer;
 
+import java.awt.event.ActionEvent;
+
 public class BillInformationAndPayController {
 
     @FXML
@@ -37,5 +39,9 @@ public class BillInformationAndPayController {
 
     public static void setViewer(BillInformationAndPayViewer newViewer){
         viewer = newViewer;
+    }
+
+    public void onReturnButtonClick(){
+
     }
 }

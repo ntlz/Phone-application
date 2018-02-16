@@ -1,11 +1,14 @@
 package other.scene1;
 
 import common.model.Bill;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 import payment.controller.BillsController;
 import payment.model.PaymentUser;
 import payment.view.BillsViewer;
@@ -29,18 +32,7 @@ public class Main extends Application {
                 Bill.Currency.RUBLE, 4000);
 
         billsViewer = new BillsViewer();
-        BillsController billsController = new BillsController();
-        billsController.setBillViewer(billsViewer);
-        billsController.setUser(user);
-        billsController.setStage(primaryStage);
-        billsViewer.setBillsController(billsController);
-        Parent root = FXMLLoader.load(getClass().getResource("../../payment/view/structures/BillsStructure.fxml"));
-        primaryStage.setTitle("My Bills");
-        Scene scene = new Scene(root, 335, 600);
-        scene.getStylesheets().add((getClass().getResource("../../payment/view/css/ButtonsStyle.css")).toExternalForm());
-
-        primaryStage.setScene(scene);
-        primaryStage.show();
+        billsViewer.loadScene(primaryStage, user);
     }
 
 
@@ -48,11 +40,4 @@ public class Main extends Application {
         launch(args);
     }
 
-    public static BillsViewer getBillsViewer(){
-        return billsViewer;
-    }
-
-    public static PaymentUser getUser(){
-        return user;
-    }
 }
