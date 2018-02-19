@@ -76,7 +76,13 @@ public class PaymentUser {
                         Date dateOfPay,
                         Bill.Currency currency,
                         int sum){
-        bills.add(new Bill(idOfBill, description, nameOfSender, dateOfSending, dateOfPay, Bill.Currency.RUBLE, sum));
+        bills.add(0, new Bill(idOfBill,
+                                    description,
+                                    nameOfSender,
+                                    dateOfSending,
+                                    dateOfPay,
+                                    Bill.Currency.RUBLE,
+                                    sum));
     }
 
     public Vector<Bill> getBills(){

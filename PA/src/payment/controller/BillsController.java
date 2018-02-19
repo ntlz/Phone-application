@@ -5,16 +5,13 @@ import java.util.ResourceBundle;
 
 import common.model.Bill;
 import javafx.animation.TranslateTransition;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
+import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import other.scene1.Main;
 import payment.model.PaymentUser;
 import payment.view.BillInformationAndPayViewer;
 import payment.view.BillsViewer;
@@ -30,7 +27,7 @@ public class BillsController {
     private URL location;
 
     @FXML
-    private ListView<String> listView;
+    private ListView<BillsViewer.HBoxBill> listView;
 
     @FXML
     private Text textSum;
@@ -42,21 +39,23 @@ public class BillsController {
     private Button menuButton;
 
     @FXML
-    private Button chooseButton;
+    private Button choseButton;
 
     @FXML
     private Button switchBillsButton;
 
-    private ObservableList<String> list = FXCollections.observableArrayList();
     private static PaymentUser user;
     private Stage stage;    //поле для переключения сцен
     private static BillsViewer billsViewer;
     private BillInformationAndPayViewer informationViewer = new BillInformationAndPayViewer();
+    private int sumOfChosedBills;
+    private int sumOfAllBills;
+    private static boolean flagListeners = false;
 
     @FXML
     void initialize() throws Exception {
         assert listView != null : "fx:id=\"listView\" was not injected: check your FXML file 'BillsStructure.fxml'.";
-        billsViewer.loadData(list, listView, textSum, user);
+        billsViewer.loadData(listView, textSum, user);
 
         menuPane.setTranslateX(-200);
         TranslateTransition menuMoving = new TranslateTransition(Duration.millis(300), menuPane);
@@ -68,11 +67,58 @@ public class BillsController {
             menuMoving.play();
         });
 
+        choseButton.setOnMouseClicked(evt ->{
+            onChoseButtonClick();
+        });
     }
 
-    public void onButtonPayClick(ActionEvent event, Bill bill) throws Exception{
+    public void onSelectCheckBox(BillsViewer.HBoxBill hbox){
+        if(hbox.getCheckBox().isSelected()) {
+            hbox.setOpacity(1);
+            sumOfChosedBills += hbox.getBill().getSum();
+            BillsViewer.setSumText(textSum, sumOfChosedBills);
+        }
+        else{
+            hbox.setOpacity(0.5);
+            sumOfChosedBills -= hbox.getBill().getSum();
+            BillsViewer.setSumText(textSum, sumOfChosedBills);
+        }
+    }
+
+    public void onButtonPayClick(Bill bill) throws Exception{
         informationViewer.setBill(bill);
         informationViewer.showScene(stage);
+    }
+
+    private void onChoseButtonClick(){
+        sumOfAllBills = 0;
+        for (BillsViewer.HBoxBill hbox: listView.getItems()) {
+            hbox.getCheckBox().setSelected(false);
+            hbox.getChildren().add(0, hbox.getCheckBox());
+            if(!flagListeners) {
+                hbox.getCheckBox().selectedProperty().addListener(evt -> onSelectCheckBox(hbox));
+            }
+            hbox.setOpacity(0.5);
+            sumOfAllBills += hbox.getBill().getSum();
+        }
+        flagListeners = true;
+        choseButton.setText("Отменить");
+        switchBillsButton.setText("Оплатить выбранные");
+        choseButton.setOnMouseClicked(evt-> onCancelButtonClick());
+        sumOfChosedBills = 0;
+        BillsViewer.setSumText(textSum, sumOfChosedBills);
+    }
+
+    private void onCancelButtonClick(){
+        for (BillsViewer.HBoxBill hbox: listView.getItems()) {
+            hbox.getChildren().remove(0);
+            hbox.setOpacity(1);
+        }
+        choseButton.setText("Выбрать");
+        switchBillsButton.setText("Пришедшие счета");
+        choseButton.setOnMouseClicked(evt-> onChoseButtonClick());
+        BillsViewer.setSumText(textSum, sumOfAllBills);
+        sumOfChosedBills = 0;
     }
 
     public void setUser(PaymentUser newUser){

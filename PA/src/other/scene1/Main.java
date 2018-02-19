@@ -24,15 +24,15 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception{
         user = new PaymentUser("1234", "123456");
-        user.addBill("1", "Кошка", "ООО Мармелад", new Date(), new Date(),
+        user.addBill("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 1000 );
         user.addBill("2", "Собака", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 2000);
         user.addBill("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 4000);
 
-        billsViewer = new BillsViewer();
-        billsViewer.loadScene(primaryStage, user);
+        billsViewer = new BillsViewer(user);
+        billsViewer.loadScene(primaryStage);
     }
 
 
