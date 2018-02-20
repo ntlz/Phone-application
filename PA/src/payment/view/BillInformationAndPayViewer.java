@@ -1,23 +1,22 @@
 package payment.view;
 
-import common.model.Bill;
+import payment.model.Bill;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import payment.controller.BillInformationAndPayController;
-import payment.model.PaymentUser;
+import payment.model.User;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDateTime;
 
 public class BillInformationAndPayViewer {
 
-    private PaymentUser user;
+    private User user;
     private Bill bill;
 
-    public BillInformationAndPayViewer(PaymentUser user, Bill bill){
+    public BillInformationAndPayViewer(User user, Bill bill){
         this.user = user;
         this.bill = bill;
     }

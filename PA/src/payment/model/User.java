@@ -1,40 +1,41 @@
 package payment.model;
 
-import common.model.Bill;
-
 import java.util.Date;
 import java.util.Vector;
 
 /**
  * класс, содержащий информацию о карте плательщика
  */
-public class PaymentUser {
+public class User {
 
     private String phoneNumber;               //номер телефона
     private String password;                    //пароль
     private String email;                       //почта
     private boolean isPhoneNumberValid;       //флаг проверен/не проверен номер телефона
     private boolean isEmailValid;               //флаг проверен/не проверен email
-    private Vector<Bill> bills;
+    private Vector<Bill> billsOutcome;            //исходящие счета
+    private Vector<Bill> billsIncome;          //входящие счета
 
-    public PaymentUser(String phoneNumber,
-                       String password){
+    public User(String phoneNumber,
+                String password){
         this.phoneNumber = phoneNumber;
         this.password = password;       //добавить шифрование пароля !!!
         this.isPhoneNumberValid = false;
         this.isEmailValid = false;
-        this.bills = new Vector<>(10);
+        this.billsIncome = new Vector<>(10);
+        this.billsOutcome = new Vector<>(10);
     }
 
-    public PaymentUser(String phoneNumber,
-                       String password,
-                       String email) {
+    public User(String phoneNumber,
+                String password,
+                String email) {
         this.phoneNumber = phoneNumber;
         this.password = password;       //добавить шифрование пароля !!!
         this.email = email;             //вставить проверку email с помощью регулярок
         this.isPhoneNumberValid = false;
         this.isEmailValid = false;
-        this.bills = new Vector<>(10);
+        this.billsIncome = new Vector<>(10);
+        this.billsIncome = new Vector<>(10);
     }
 
     public String getPhoneNumber() {
@@ -69,14 +70,14 @@ public class PaymentUser {
         isEmailValid = false;
     }
 
-    public void addBill(String idOfBill,
-                        String description,
-                        String nameOfSender,
-                        Date dateOfSending,
-                        Date dateOfPay,
-                        Bill.Currency currency,
-                        int sum){
-        bills.add(0, new Bill(idOfBill,
+    public void addBillOutcome(String idOfBill,
+                               String description,
+                               String nameOfSender,
+                               Date dateOfSending,
+                               Date dateOfPay,
+                               Bill.Currency currency,
+                               int sum){
+        billsOutcome.add(0, new Bill(idOfBill,
                                     description,
                                     nameOfSender,
                                     dateOfSending,
@@ -85,7 +86,9 @@ public class PaymentUser {
                                     sum));
     }
 
-    public Vector<Bill> getBills(){
-        return bills;
+    public Vector<Bill> getBillsIncome(){
+        return billsIncome;
     }
+
+    public Vector<Bill> getBillsOutcome() {return billsOutcome;}
 }

@@ -4,11 +4,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
-import payment.model.PaymentUser;
+import payment.model.User;
 import payment.view.BillInformationAndPayViewer;
 import payment.view.BillsViewer;
-
-import java.awt.event.ActionEvent;
 
 public class BillInformationAndPayController {
 
@@ -34,7 +32,7 @@ public class BillInformationAndPayController {
     private Button payAndMessageButton;
 
     private static BillInformationAndPayViewer viewer;
-    private static PaymentUser user;
+    private static User user;
     private static Stage stage;
 
     @FXML
@@ -46,7 +44,7 @@ public class BillInformationAndPayController {
         viewer = newViewer;
     }
 
-    public static void setUser(PaymentUser newUser){user = newUser;}
+    public static void setUser(User newUser){user = newUser;}
 
     public static void setStage(Stage primaryStage){stage = primaryStage;}
 

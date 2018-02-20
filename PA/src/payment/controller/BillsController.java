@@ -3,16 +3,15 @@ package payment.controller;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-import common.model.Bill;
+import payment.model.Bill;
 import javafx.animation.TranslateTransition;
-import javafx.beans.value.ChangeListener;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import payment.model.PaymentUser;
+import payment.model.User;
 import payment.view.BillInformationAndPayViewer;
 import payment.view.BillsViewer;
 import javafx.scene.text.Text;
@@ -44,7 +43,7 @@ public class BillsController {
     @FXML
     private Button switchBillsButton;
 
-    private static PaymentUser user;
+    private static User user;
     private Stage stage;    //поле для переключения сцен
     private static BillsViewer billsViewer;
     private BillInformationAndPayViewer informationViewer;
@@ -121,7 +120,7 @@ public class BillsController {
         sumOfChosedBills = 0;
     }
 
-    public void setUser(PaymentUser newUser){
+    public void setUser(User newUser){
         user = newUser;
     }
 

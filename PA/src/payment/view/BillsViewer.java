@@ -1,12 +1,7 @@
 package payment.view;
 
-import common.model.Bill;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
-import javafx.event.EventHandler;
+import payment.model.Bill;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -18,14 +13,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import payment.controller.BillsController;
-import payment.model.PaymentUser;
+import payment.model.User;
 
 public class BillsViewer {
 
-    private PaymentUser user;
+    private User user;
     private static BillsController billsController;
 
-    public BillsViewer(PaymentUser user) {
+    public BillsViewer(User user) {
         this.user = user;
     }
 
@@ -79,11 +74,11 @@ public class BillsViewer {
         }
     }
 
-    public void loadData(ListView<HBoxBill> listView, Text textSum, PaymentUser user) throws Exception{
+    public void loadData(ListView<HBoxBill> listView, Text textSum, User user) throws Exception{
         int sumOfBills = 0;
         listView.setFixedCellSize(45);
         for (Bill b:
-             user.getBills()) {
+             user.getBillsOutcome()) {
             listView.getItems().add(new HBoxBill(b));
             sumOfBills += b.getSum();
         }

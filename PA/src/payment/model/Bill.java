@@ -1,4 +1,4 @@
-package common.model;
+package payment.model;
 
 import java.util.Date;
 
