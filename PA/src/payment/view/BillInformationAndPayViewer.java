@@ -7,26 +7,30 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import payment.controller.BillInformationAndPayController;
+import payment.model.PaymentUser;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 
 public class BillInformationAndPayViewer {
 
+    private PaymentUser user;
     private Bill bill;
-    private BillInformationAndPayController controller;
+
+    public BillInformationAndPayViewer(PaymentUser user, Bill bill){
+        this.user = user;
+        this.bill = bill;
+    }
 
     public void showScene(Stage stage) throws Exception{
         BillInformationAndPayController.setViewer(this);
+        BillInformationAndPayController.setUser(user);
+        BillInformationAndPayController.setStage(stage);
         Parent root = FXMLLoader.load(getClass().getResource("structures/BillInformationAndPayStructure.fxml"));
         stage.setTitle("My Bills");
         Scene scene = new Scene(root, 335, 600);
         stage.setScene(scene);
         stage.show();
-    }
-
-    public void setBill(Bill bill){
-        this.bill = bill;
     }
 
     public void pullInformation(Label senderLabel,

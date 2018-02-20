@@ -47,7 +47,7 @@ public class BillsController {
     private static PaymentUser user;
     private Stage stage;    //поле для переключения сцен
     private static BillsViewer billsViewer;
-    private BillInformationAndPayViewer informationViewer = new BillInformationAndPayViewer();
+    private BillInformationAndPayViewer informationViewer;
     private int sumOfChosedBills;
     private int sumOfAllBills;
     private static boolean flagListeners = false;
@@ -86,7 +86,7 @@ public class BillsController {
     }
 
     public void onButtonPayClick(Bill bill) throws Exception{
-        informationViewer.setBill(bill);
+        informationViewer = new BillInformationAndPayViewer(user, bill);
         informationViewer.showScene(stage);
     }
 

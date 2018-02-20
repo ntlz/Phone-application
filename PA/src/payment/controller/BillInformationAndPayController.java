@@ -3,7 +3,10 @@ package payment.controller;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.stage.Stage;
+import payment.model.PaymentUser;
 import payment.view.BillInformationAndPayViewer;
+import payment.view.BillsViewer;
 
 import java.awt.event.ActionEvent;
 
@@ -31,6 +34,8 @@ public class BillInformationAndPayController {
     private Button payAndMessageButton;
 
     private static BillInformationAndPayViewer viewer;
+    private static PaymentUser user;
+    private static Stage stage;
 
     @FXML
     void initialize() throws Exception{
@@ -41,7 +46,16 @@ public class BillInformationAndPayController {
         viewer = newViewer;
     }
 
-    public void onReturnButtonClick(){
+    public static void setUser(PaymentUser newUser){user = newUser;}
 
+    public static void setStage(Stage primaryStage){stage = primaryStage;}
+
+    public void onReturnButtonClick(){
+        try {
+            new BillsViewer(user).loadScene(stage);
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
     }
 }
