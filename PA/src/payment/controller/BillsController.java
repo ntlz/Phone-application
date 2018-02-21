@@ -16,6 +16,7 @@ import payment.view.BillInformationAndPayViewer;
 import payment.view.BillInformationViewer;
 import payment.view.BillsViewer;
 import javafx.scene.text.Text;
+import payment.view.NewBillViewer;
 
 
 public class BillsController {
@@ -51,7 +52,7 @@ public class BillsController {
     private Button menuReturnButton;
 
     private static User user;
-    private Stage stage;    //поле для переключения сцен
+    private static Stage stage;    //поле для переключения сцен
     private static BillsViewer billsViewer;
     private int sumOfChoosedBills;
     private int sumOfAllBills;
@@ -193,11 +194,21 @@ public class BillsController {
         sumOfChoosedBills = 0;
     }
 
+    @FXML
+    private void onNewBillButtonClick(){
+        try{
+            new NewBillViewer(user, stage).loadScene();
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+        }
+    }
+
     public void setUser(User newUser){
         user = newUser;
     }
 
-    public void setStage(Stage primaryStage){
+    public static void setStage(Stage primaryStage){
         stage = primaryStage;
     }
 

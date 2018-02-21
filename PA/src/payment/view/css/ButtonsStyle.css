@@ -8,3 +8,13 @@
     -fx-text-fill: #395306;
     -fx-font-size: 15px;
 }
+
+.newBillButton{
+    -fx-background-color:
+            linear-gradient(#f0ff35, #a9ff00),
+            radial-gradient(center 50% 120%, radius 200%, #80c800 45%, #b8ee36 50%);
+    -fx-background-image: url("../img/newBillImg.png");
+    -fx-background-position: center;
+    -fx-background-size: 50px;
+    -fx-background-repeat: no-repeat;
+}

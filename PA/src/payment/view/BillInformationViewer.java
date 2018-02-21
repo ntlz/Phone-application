@@ -42,7 +42,7 @@ public class BillInformationViewer {
             System.out.println("Ups");
             return;
         }
-        senderLabel.setText("Отправитель: " + bill.getNameOfSender());
+        senderLabel.setText("Получатель: " + bill.getNameOfSender());
         descriptionLabel.setText("Описание: " + bill.getDescription());
         SimpleDateFormat formatter = new SimpleDateFormat("dd.MM.yyyy");
         dateLabel.setText("Дата выставления: " + formatter.format(bill.getDateOfSending()));

@@ -12,7 +12,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception{
-        User user = new User("1234", "123456");
+        User user = new User("8(985)617-08-48", "123456");
         user.addBillIncome("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 1000 );
         user.addBillIncome("2", "Собака", "ООО Мармелад", new Date(), new Date(),

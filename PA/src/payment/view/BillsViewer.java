@@ -130,7 +130,7 @@ public class BillsViewer {
         billsController = new BillsController();
         billsController.setBillViewer(this);
         billsController.setUser(user);
-        billsController.setStage(primaryStage);
+        BillsController.setStage(primaryStage);
         Parent root = FXMLLoader.load(getClass().getResource("structures/BillsStructure.fxml"));
         primaryStage.setTitle("My Bills");
 
