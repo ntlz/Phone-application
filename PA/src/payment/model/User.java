@@ -70,14 +70,14 @@ public class User {
         isEmailValid = false;
     }
 
-    public void addBillOutcome(String idOfBill,
-                               String description,
-                               String nameOfSender,
-                               Date dateOfSending,
-                               Date dateOfPay,
-                               Bill.Currency currency,
-                               int sum){
-        billsOutcome.add(0, new Bill(idOfBill,
+    public void addBillIncome(String idOfBill,
+                              String description,
+                              String nameOfSender,
+                              Date dateOfSending,
+                              Date dateOfPay,
+                              Bill.Currency currency,
+                              int sum){
+        billsIncome.add(0, new Bill(idOfBill,
                                     description,
                                     nameOfSender,
                                     dateOfSending,
@@ -86,9 +86,23 @@ public class User {
                                     sum));
     }
 
-    public Vector<Bill> getBillsIncome(){
-        return billsIncome;
+    public void addBillOutcome(String idOfBill,
+                              String description,
+                              String nameOfSender,
+                              Date dateOfSending,
+                              Date dateOfPay,
+                              Bill.Currency currency,
+                              int sum){
+        billsOutcome.add(0, new Bill(idOfBill,
+                description,
+                nameOfSender,
+                dateOfSending,
+                dateOfPay,
+                Bill.Currency.RUBLE,
+                sum));
     }
 
-    public Vector<Bill> getBillsOutcome() {return billsOutcome;}
+    public Vector<Bill> getBillsOutcome(){return billsOutcome;}
+
+    public Vector<Bill> getBillsIncome() {return billsIncome;}
 }

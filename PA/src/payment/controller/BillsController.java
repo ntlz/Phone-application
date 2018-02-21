@@ -13,6 +13,7 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import payment.model.User;
 import payment.view.BillInformationAndPayViewer;
+import payment.view.BillInformationViewer;
 import payment.view.BillsViewer;
 import javafx.scene.text.Text;
 
@@ -26,7 +27,10 @@ public class BillsController {
     private URL location;
 
     @FXML
-    private ListView<BillsViewer.HBoxBill> listView;
+    private ListView<BillsViewer.HBoxBill> listViewIncome;
+
+    @FXML
+    private ListView<BillsViewer.HBoxBill> listViewOutcome;
 
     @FXML
     private Text textSum;
@@ -38,23 +42,31 @@ public class BillsController {
     private Button menuButton;
 
     @FXML
-    private Button choseButton;
+    private Button chooseButton;
 
     @FXML
     private Button switchBillsButton;
 
+    @FXML
+    private Button menuReturnButton;
+
     private static User user;
     private Stage stage;    //поле для переключения сцен
     private static BillsViewer billsViewer;
-    private BillInformationAndPayViewer informationViewer;
-    private int sumOfChosedBills;
+    private int sumOfChoosedBills;
     private int sumOfAllBills;
-    private static boolean flagListeners = false;
-
+    private static boolean flagListenersIncome = false;
+    private static boolean flagListenersOutcome = false;
+    private static boolean flagToReturn = false;        //флаг, помогающий возвращаться к тем счетам, из которых мы ушли к информации
+                                                        //о конкретном счете
+                                                        //false - ушли из Входящих счетов
+                                                        //true - ушли из Исходящих счетов
     @FXML
     void initialize() throws Exception {
-        assert listView != null : "fx:id=\"listView\" was not injected: check your FXML file 'BillsStructure.fxml'.";
-        billsViewer.loadData(listView, textSum, user);
+        assert listViewIncome != null : "fx:id=\"listViewIncome\" was not injected: check your FXML file 'BillsStructure.fxml'.";
+        billsViewer.loadData(listViewIncome, listViewOutcome, textSum, user);
+        flagListenersOutcome = false;
+        flagListenersIncome = false;
 
         menuPane.setTranslateX(-200);
         TranslateTransition menuMoving = new TranslateTransition(Duration.millis(300), menuPane);
@@ -66,58 +78,119 @@ public class BillsController {
             menuMoving.play();
         });
 
-        choseButton.setOnMouseClicked(evt ->{
-            onChoseButtonClick();
+        menuReturnButton.setOnMouseClicked(evt ->{
+            menuMoving.setRate(-1);
+            menuMoving.play();
         });
+
+        chooseButton.setOnMouseClicked(evt ->{
+            onChooseButtonClick();
+        });
+
+        if(!flagToReturn) {
+            listViewOutcome.setVisible(false);
+        }
+        else
+        {
+            onSwitchBillsClick();
+        }
+        switchBillsButton.setOnMouseClicked(evt->onSwitchBillsClick());
     }
 
-    public void onSelectCheckBox(BillsViewer.HBoxBill hbox){
+    private void onSelectCheckBox(BillsViewer.HBoxBill hbox){
         if(hbox.getCheckBox().isSelected()) {
             hbox.setOpacity(1);
-            sumOfChosedBills += hbox.getBill().getSum();
-            BillsViewer.setSumText(textSum, sumOfChosedBills);
+            sumOfChoosedBills += hbox.getBill().getSum();
+            BillsViewer.setSumText(textSum, sumOfChoosedBills);
         }
         else{
             hbox.setOpacity(0.5);
-            sumOfChosedBills -= hbox.getBill().getSum();
-            BillsViewer.setSumText(textSum, sumOfChosedBills);
+            sumOfChoosedBills -= hbox.getBill().getSum();
+            BillsViewer.setSumText(textSum, sumOfChoosedBills);
         }
     }
 
-    public void onButtonPayClick(Bill bill) throws Exception{
-        informationViewer = new BillInformationAndPayViewer(user, bill);
-        informationViewer.showScene(stage);
+    private void onSwitchBillsClick(){
+        if(listViewIncome.isVisible()){
+            listViewIncome.setVisible(false);
+            listViewOutcome.setVisible(true);
+            switchBillsButton.setText("Входящие счета");
+            billsViewer.setOutcomeSumText(textSum);
+        }
+        else
+        {
+            listViewOutcome.setVisible(false);
+            listViewIncome.setVisible(true);
+            switchBillsButton.setText("Исходящие счета");
+            billsViewer.setIncomeSumText(textSum);
+        }
     }
 
-    private void onChoseButtonClick(){
+    public void onHBoxClick(BillsViewer.HBoxBill hbox, Bill bill) throws Exception{
+        if(hbox instanceof BillsViewer.HBoxIncomeBill) {
+            flagToReturn = false;
+            BillInformationAndPayViewer informationViewer = new BillInformationAndPayViewer(user, bill);
+            informationViewer.showScene(stage);
+        }
+        else if(hbox instanceof BillsViewer.HBoxOutcomeBill){
+            flagToReturn = true;
+            BillInformationViewer informationViewer = new BillInformationViewer(user, bill);
+            informationViewer.showScene(stage);
+        }
+    }
+
+    private void onChooseButtonClick(){
+        ListView<BillsViewer.HBoxBill> list;
+        if(listViewIncome.isVisible()){
+            list = listViewIncome;
+            switchBillsButton.setText("Оплатить выбранные");
+        }
+        else{
+            list = listViewOutcome;
+            switchBillsButton.setText("Удалить выбранные");
+        }
         sumOfAllBills = 0;
-        for (BillsViewer.HBoxBill hbox: listView.getItems()) {
+        for (BillsViewer.HBoxBill hbox: list.getItems()) {
             hbox.getCheckBox().setSelected(false);
             hbox.getChildren().add(0, hbox.getCheckBox());
-            if(!flagListeners) {
+            if(!flagListenersIncome || !flagListenersOutcome) {
                 hbox.getCheckBox().selectedProperty().addListener(evt -> onSelectCheckBox(hbox));
             }
             hbox.setOpacity(0.5);
             sumOfAllBills += hbox.getBill().getSum();
         }
-        flagListeners = true;
-        choseButton.setText("Отменить");
-        switchBillsButton.setText("Оплатить выбранные");
-        choseButton.setOnMouseClicked(evt-> onCancelButtonClick());
-        sumOfChosedBills = 0;
-        BillsViewer.setSumText(textSum, sumOfChosedBills);
+        if(listViewIncome.isVisible()){
+            flagListenersIncome = true;
+        }
+        else{
+            flagListenersOutcome = true;
+        }
+        chooseButton.setText("Отменить");
+        chooseButton.setOnMouseClicked(evt-> onCancelButtonClick());
+        switchBillsButton.setOnMouseClicked(null);
+        sumOfChoosedBills = 0;
+        BillsViewer.setSumText(textSum, sumOfChoosedBills);
     }
 
     private void onCancelButtonClick(){
-        for (BillsViewer.HBoxBill hbox: listView.getItems()) {
+        ListView<BillsViewer.HBoxBill> list;
+        if(listViewIncome.isVisible()){
+            list = listViewIncome;
+            switchBillsButton.setText("Исходящие счета");
+        }
+        else{
+            list = listViewOutcome;
+            switchBillsButton.setText("Входящие счета");
+        }
+        for (BillsViewer.HBoxBill hbox: list.getItems()) {
             hbox.getChildren().remove(0);
             hbox.setOpacity(1);
         }
-        choseButton.setText("Выбрать");
-        switchBillsButton.setText("Пришедшие счета");
-        choseButton.setOnMouseClicked(evt-> onChoseButtonClick());
+        chooseButton.setText("Выбрать");
+        chooseButton.setOnMouseClicked(evt-> onChooseButtonClick());
+        switchBillsButton.setOnMouseClicked(evt->onSwitchBillsClick());
         BillsViewer.setSumText(textSum, sumOfAllBills);
-        sumOfChosedBills = 0;
+        sumOfChoosedBills = 0;
     }
 
     public void setUser(User newUser){

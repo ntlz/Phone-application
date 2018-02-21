@@ -75,7 +75,7 @@ public class Bill {
         return sum;
     }
 
-    public boolean getPaid(){
+    public boolean getStatus(){
         return isPaid;
     }
 

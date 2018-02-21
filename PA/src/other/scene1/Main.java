@@ -10,20 +10,23 @@ import java.util.Date;
 
 public class Main extends Application {
 
-    private static BillsViewer billsViewer;
-    private static User user;
-
     @Override
     public void start(Stage primaryStage) throws Exception{
-        user = new User("1234", "123456");
-        user.addBillOutcome("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
+        User user = new User("1234", "123456");
+        user.addBillIncome("1", "Кошка лялялялялялялялял", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 1000 );
-        user.addBillOutcome("2", "Собака", "ООО Мармелад", new Date(), new Date(),
+        user.addBillIncome("2", "Собака", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 2000);
-        user.addBillOutcome("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
+        user.addBillIncome("3", "Попугай", "ООО Мармелад", new Date(), new Date(),
                 Bill.Currency.RUBLE, 4000);
 
-        billsViewer = new BillsViewer(user);
+        user.addBillOutcome("4", "Стрижка", "ООО Кат-кат", new Date(), new Date(),
+                Bill.Currency.RUBLE, 600);
+        user.addBillOutcome("5", "Парковка", "ООО Пенек", new Date(), new Date(),
+                Bill.Currency.RUBLE, 500);
+
+
+        BillsViewer billsViewer = new BillsViewer(user);
         billsViewer.loadScene(primaryStage);
     }
 
